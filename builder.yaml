@@ -1,0 +1,5 @@
+components:
+  - name: starsiege
+    role: static
+    output: publish/wwwroot
+    path: /
