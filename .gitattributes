@@ -1,0 +1,2 @@
+# I file di publish devono restare identici byte per byte (hash di integrita' Blazor)
+publish/** -text
