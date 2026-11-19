@@ -1,0 +1,195 @@
+:root {
+    --bg: #05030f;
+    --fg: #e8e8ff;
+    --accent: #ffe066;
+    --pink: #ff4fd8;
+    --cyan: #4fd8ff;
+    --green: #7dff6a;
+    --red: #ff5a5a;
+    --font: 'Press Start 2P', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    height: 100%;
+    background: radial-gradient(ellipse at center, #140a33 0%, var(--bg) 70%);
+    color: var(--fg);
+    font-family: var(--font);
+    overflow: hidden;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.stage {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px;
+}
+
+.screen {
+    position: relative;
+    /* mantiene il rapporto 672x768 adattandosi alla finestra */
+    height: min(calc(100dvh - 60px), calc((100vw - 16px) * 768 / 672));
+    aspect-ratio: 672 / 768;
+    border: 2px solid #2a1f5c;
+    border-radius: 8px;
+    box-shadow: 0 0 40px rgba(79, 216, 255, .15), inset 0 0 60px rgba(0,0,0,.5);
+    overflow: hidden;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    image-rendering: pixelated;
+}
+
+/* effetto CRT leggero */
+.screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.2vh;
+    background: rgba(5, 3, 15, .78);
+    text-align: center;
+    padding: 16px;
+    z-index: 2;
+}
+
+    .overlay.transparent { background: transparent; }
+
+h1:focus { outline: none; }
+
+.logo {
+    margin: 0;
+    font-size: clamp(28px, 7vh, 64px);
+    line-height: 1.15;
+    color: var(--accent);
+    text-shadow: 4px 4px 0 var(--pink), 8px 8px 0 #3a1a6b;
+    letter-spacing: 4px;
+}
+
+.subtitle { color: var(--cyan); font-size: clamp(9px, 1.6vh, 14px); margin: 0; }
+
+.legend { font-size: clamp(9px, 1.7vh, 14px); border-spacing: 10px 8px; }
+.legend td:first-child { text-align: right; }
+.dot { display: inline-block; width: 22px; height: 14px; border-radius: 4px 4px 2px 2px; }
+.dot.ufo { background: var(--red); width: 30px; border-radius: 50% 50% 3px 3px; }
+.dot.a { background: var(--pink); }
+.dot.b { background: var(--cyan); }
+.dot.c { background: var(--green); }
+
+.btn {
+    font-family: var(--font);
+    font-size: clamp(12px, 2.2vh, 18px);
+    padding: 14px 28px;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--pink);
+    cursor: pointer;
+}
+
+    .btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--pink); }
+    .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--pink); }
+
+.help { font-size: clamp(7px, 1.2vh, 10px); color: #9a9ac0; line-height: 1.8; margin: 0; }
+
+.gameover { color: var(--red); font-size: clamp(24px, 5vh, 48px); margin: 0; text-shadow: 3px 3px 0 #3a1a6b; }
+.final { color: var(--accent); margin: 0; }
+.record { color: var(--green); margin: 0; }
+h2 { color: var(--green); font-size: clamp(12px, 2.5vh, 20px); }
+
+.blink { animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Controlli touch: visibili solo su dispositivi touch */
+.touch { display: none; gap: 16px; }
+.touch button {
+    font-size: 22px;
+    width: 72px;
+    height: 56px;
+    border-radius: 12px;
+    border: 2px solid #3a2f7c;
+    background: #1a1240;
+    color: var(--fg);
+    touch-action: none;
+}
+.touch button.fire { background: #4a1240; border-color: var(--pink); color: var(--pink); width: 110px; }
+.touch button.pressed { background: #3a2f7c; }
+
+@media (pointer: coarse) {
+    .touch { display: flex; }
+    .screen { height: min(calc(100dvh - 130px), calc((100vw - 16px) * 768 / 672)); }
+}
+
+footer { font-size: 8px; color: #5a5a80; }
+
+/* ---- Blazor: caricamento ed errori ---- */
+#blazor-error-ui {
+    background: #3a1020;
+    color: #fff;
+    bottom: 0;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    font-size: 10px;
+}
+
+    #blazor-error-ui a { color: var(--accent); }
+    #blazor-error-ui .dismiss { cursor: pointer; position: absolute; right: 0.75rem; top: 0.5rem; }
+
+.loading-progress {
+    position: absolute;
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    inset: 30vh 0 auto 0;
+    margin: 0 auto;
+}
+
+    .loading-progress circle {
+        fill: none;
+        stroke: #2a1f5c;
+        stroke-width: 0.6rem;
+        transform-origin: 50% 50%;
+        transform: rotate(-90deg);
+    }
+
+        .loading-progress circle:last-child {
+            stroke: var(--accent);
+            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+            transition: stroke-dasharray 0.05s ease-in-out;
+        }
+
+.loading-progress-text {
+    position: absolute;
+    text-align: center;
+    inset: calc(30vh + 3.4rem) 0 auto 0.2rem;
+    color: var(--accent);
+    font-size: 12px;
+}
+
+    .loading-progress-text:after { content: var(--blazor-load-percentage-text, "Loading"); }

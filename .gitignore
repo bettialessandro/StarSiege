@@ -485,3 +485,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Cartella di rilascio versionata (build pronta per il deploy)
+!/publish/
